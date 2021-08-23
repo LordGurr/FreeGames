@@ -104,6 +104,25 @@ namespace FreeGames
                     }
                     startIndex = temp.IndexOf(start, startIndex) + start.Length;
                 }
+                start = "class=\"product-tile__price-discounted _price\">0.00";
+                startIndex = temp.IndexOf(start) + start.Length;
+                free = "track-add-to-cart-title=\"";
+                while (startIndex > start.Length)  // >0.00</span></span><span
+                {
+                    int nameIndex = temp.IndexOf(free, startIndex - 8000) + free.Length;
+                    string game = temp.Substring(nameIndex, temp.IndexOf('"', nameIndex) - nameIndex).Trim();
+                    if (!game.ToLower().Contains("demo"))
+                    {
+                        links.Add("http://www.gog.com/game/" + game.ToLower().Replace(' ', '_'));
+                        game = game.Replace('_', ' ');
+                        freeGames.Add("Gog: " + SetUpperCase(game));
+                        if (last.Length <= freeGames.Count() - 1 || freeGames[freeGames.Count() - 1] != last[freeGames.Count() - 1])
+                        {
+                            Console.WriteLine(freeGames[freeGames.Count() - 1]);
+                        }
+                    }
+                    startIndex = temp.IndexOf(start, startIndex) + start.Length;
+                }
             }
             File.WriteAllLines(fileName, freeGames);
             //timeTaken.Add(stopwatch.Elapsed.TotalSeconds);
